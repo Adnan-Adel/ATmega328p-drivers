@@ -1,32 +1,39 @@
 /*
  * button.h
  *
- * Created: 12/7/2022 9:29:55 PM
- *  Author: Adnan
- */ 
+ *  Created on: Aug 24, 2023
+ *      Author: Adnan
+ */
+
+#ifndef HAL_BUTTON_BUTTON_H_
+#define HAL_BUTTON_BUTTON_H_
+
+/* ------------------------------- Includes ------------------------------- */
+#include "../../MCAL/GPIO/mcal_gpio.h"
+
+/* ------------------------------- Macros Declarations ------------------------------- */
+// Button Pressing State
+#define BTN_RELEASED					0
+#define BTN_PRESSED						1
 
 
-#ifndef BUTTON_H_
-#define BUTTON_H_
-
-#include "../../MCAL/DIO/dio.h"	
-
-#define BUTTON_PORT				PORTC_INDEX
-
-#define FORWARD_BUTTON_PIN	    pin0
-#define LEFT_BUTTON_PIN			pin1
-#define RIGHT_BUTTON_PIN		pin2
-#define BACKWARD_BUTTON_PIN		pin3
-#define STOP_BUTTON_PIN		    pin4
-
-#define BUTTON_NOT_PRESSED 0
-#define BUTTON_PRESSED     1
-
-void BUTTON_init(DIO_PORT_ID portNumber, DIO_PIN_ID pinNumber);
-
-void BUTTON_read(DIO_PORT_ID portNumber, DIO_PIN_ID pinNumber, DIO_Value *value);
+// Button Connection State
+#define BTN_STATE_EXT_PULL_DOWN			0
+#define BTN_STATE_EXT_PULL_UP			1
+#define BTN_STATE_INT_PULL_UP			2
 
 
+/* ------------------------------- data types declarations ------------------------------- */
+typedef struct
+{
+	gpio_port_index_t btn_port;
+	gpio_pin_index_t btn_pin;
+	uint8_t btn_connection_state;
+}btn_t;
 
 
-#endif /* BUTTON_H_ */
+/* ----------------------- Functions Declarations ----------------------- */
+std_return_type_t button_init(const btn_t* _btn_obj);
+std_return_type_t button_read_state(const btn_t* _btn_obj, uint8_t* _state);
+
+#endif /* HAL_BUTTON_BUTTON_H_ */

@@ -1,19 +1,66 @@
 /*
  * button.c
  *
- * Created: 12/7/2022 9:29:47 PM
- *  Author: Adnan
- */ 
+ *  Created on: Aug 24, 2023
+ *      Author: Adnan
+ */
 
 #include "button.h"
 
 
-void BUTTON_init(DIO_PORT_ID portNumber, DIO_PIN_ID pinNumber)
+
+/* ----------------------- Functions Definitions ----------------------- */
+std_return_type_t button_init(const btn_t* _btn_obj)
 {
-	dio_pin_init(portNumber, pinNumber, INPUT);
+	std_return_type_t ret_val= RET_NOK;
+	if(NULL == _btn_obj)
+	{
+		ret_val= NULL_PTR;
+	}
+	else
+	{
+		ret_val= gpio_pin_set_direction(_btn_obj->btn_port, _btn_obj->btn_pin, INPUT);
+		if(_btn_obj->btn_connection_state == BTN_STATE_INT_PULL_UP)
+		{
+			ret_val= gpio_pin_connect_pullup(_btn_obj->btn_port, _btn_obj->btn_pin);
+		}
+	}
+	return ret_val;
 }
 
-void BUTTON_read(DIO_PORT_ID portNumber, DIO_PIN_ID pinNumber, DIO_Value *value)
+std_return_type_t button_read_state(const btn_t* _btn_obj, uint8_t* _state)
 {
-	dio_pin_read_value(portNumber, pinNumber, value);
+	std_return_type_t ret_val= RET_NOK;
+		if(NULL == _btn_obj)
+		{
+			ret_val= NULL_PTR;
+		}
+		else
+		{
+			uint8_t _value;
+			ret_val= gpio_pin_get_value(_btn_obj->btn_port, _btn_obj->btn_pin, &_value);
+			if((_btn_obj->btn_connection_state == BTN_STATE_EXT_PULL_UP) || (_btn_obj->btn_connection_state == BTN_STATE_INT_PULL_UP))
+			{
+				if(_value == 0)
+				{
+					*_state= BTN_PRESSED;
+				}
+				else if(_value == 1)
+				{
+					*_state= BTN_RELEASED;
+				}
+			}
+			else if(_btn_obj->btn_connection_state == BTN_STATE_EXT_PULL_DOWN)
+			{
+				if(_value == 0)
+				{
+					*_state= BTN_RELEASED;
+				}
+				else if(_value == 1)
+				{
+					*_state= BTN_PRESSED;
+				}
+			}
+		}
+		return ret_val;
 }

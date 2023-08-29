@@ -1,62 +1,44 @@
-/*
- * Registers.h
- *
- * Created: 2/12/2023 1:25:46 PM
- *  Author: LAP TECH
- */ 
+#ifndef __REGISTERS_H__
+#define __REGISTERS_H__
 
-
-#ifndef REGISTERS_H_
-#define REGISTERS_H_
-
-#include "Bit_Masking.h"
 #include "std_types.h"
+#include "Bit_Masking.h"
 
-/*******************************************************************/
-/*      DIO registers
-/******************************************************************/
-
-// PORTB registers
-#define PINB	(*(volatile uint8_t *)0x23)
-#define DDRB	(*(volatile uint8_t *)0x24)
-#define PORTB	(*(volatile uint8_t *)0x25)
-
-// PORTC registers
-#define PINC	(*(volatile uint8_t *)0x26)
-#define DDRC	(*(volatile uint8_t *)0x27)
-#define PORTC	(*(volatile uint8_t *)0x28)
-
-// PORTD registers
-#define PIND	(*(volatile uint8_t *)0x29)
-#define DDRD	(*(volatile uint8_t *)0x2A)
-#define PORTD	(*(volatile uint8_t *)0x2B)
-
-/*******************************************************************/
-/*     EXTERNAL INTERRUPT registers
-/******************************************************************/
-#define SREG	(*(volatile uint8_t *)0x5F)
-#define MCUCR	(*(volatile uint8_t *)0x55)
-#define EICRA	(*(volatile uint8_t *)0x69)
-#define EIMSK	(*(volatile uint8_t *)0x3D)
-#define EIFR	(*(volatile uint8_t *)0x3C)
-
-/*******************************************************************/
-/*     ADC registers
-/******************************************************************/
-#define ADMUX	(*(volatile uint8_t *)0x7C)
-#define ADCSRA	(*(volatile uint8_t *)0x7A)
-#define ADCH	(*(volatile uint8_t *)0x79)
-#define ADCL	(*(volatile uint8_t *)0x78)
-
-/*******************************************************************/
-/*     UART registers
-/******************************************************************/
-#define UDR		(*(volatile uint8_t *)0xC6)
-#define UBRRH	(*(volatile uint8_t *)0xC5)
-#define UBRRL	(*(volatile uint8_t *)0xC4)
-#define UCSRC	(*(volatile uint8_t *)0xC2)
-#define UCSRB	(*(volatile uint8_t *)0xC1)
-#define UCSRA	(*(volatile uint8_t *)0xC0)
+#define SREG 				(*(volatile uint8_t*)0x5F)			    // AVR Status Register
+#define MCUCR 				(*(volatile uint8_t*)0x55)				// MCU Control Register
 
 
-#endif /* REGISTERS_H_ */
+/* ----------------------- EEPROM Registers ----------------------- */
+#define EEPROM_EEARL		(*(volatile uint8_t*)0x41)				// The EEPROM Address Register Low
+#define EEPROM_EEARH		(*(volatile uint8_t*)0x42)				// The EEPROM Address Register High
+#define EEPROM_EEDR			(*(volatile uint8_t*)0x40)				// The EEPROM Data Register
+#define EEPROM_EECR			(*(volatile uint8_t*)0x3F)				// The EEPROM Control Register
+
+/* ----------------------- CLOCK Registers ----------------------- */
+#define CLOCK_OSCCAL		(*(volatile uint8_t*)0x66)				// Oscillator Calibration Register
+#define CLOCK_CLKPR 		(*(volatile uint8_t*)0x66)				// Clock Prescale Register
+#define CLOCK_SMCR			(*(volatile uint8_t*)0x53)				// Sleep Mode Control Register
+
+#define PRR					(*(volatile uint8_t*)0x64)				// Power Reduction Register
+
+/* ----------------------- Watch Dog Timer Registers ----------------------- */
+#define WDT_MCUSR			(*(volatile uint8_t*)0x54)				// MCU Status Register
+#define WDT_WDTCSR			(*(volatile uint8_t*)0x60)				// Watchdog Timer Control Register
+
+/* ----------------------- GPIO Registers ----------------------- */
+// PORTB
+#define GPIO_PORTB			(*(volatile uint8_t*)0x25)			   // The Port B Data Register
+#define GPIO_DDRB			(*(volatile uint8_t*)0x24)			   // The Port B Direction Register
+#define GPIO_PINB			(*(volatile uint8_t*)0x23)			   // The Port B Input Pins Address
+// PORTC
+#define GPIO_PORTC			(*(volatile uint8_t*)0x28)			   // The Port C Data Register
+#define GPIO_DDRC			(*(volatile uint8_t*)0x27)			   // The Port C Direction Register
+#define GPIO_PINC			(*(volatile uint8_t*)0x26)			   // The Port C Input Pins Address
+// PORTD
+#define GPIO_PORTD			(*(volatile uint8_t*)0x2B)			   // The Port D Data Register
+#define GPIO_DDRD			(*(volatile uint8_t*)0x2A)			   // The Port D Direction Register
+#define GPIO_PIND			(*(volatile uint8_t*)0x29)			   // The Port D Input Pins Address
+
+
+
+#endif
