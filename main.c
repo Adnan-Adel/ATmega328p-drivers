@@ -4,12 +4,17 @@
 #include "HAL/DC_MOTOR/dc_motor.h"
 #include "HAL/KEYPAD/keypad.h"
 #include "HAL/LCD/chr_lcd.h"
+#include "MCAL/EXTI/ext_interrupt.h"
+
+void Interrupt_Handler(void);
 
 std_return_type_t ret;
 
+
+
 btn_t btn1={
 		.btn_port= PORTD_INDEX,
-		.btn_pin= PIN0,
+		.btn_pin= PIN2,
 		.btn_connection_state= BTN_STATE_EXT_PULL_DOWN
 };
 
@@ -104,15 +109,17 @@ uint8_t k_val;
 
 int main(void)
 {
-	ret= lcd_8bit_init(&lcd1);
-	ret= lcd_8bit_send_string_pos(&lcd1, "Adnan", 2, 3);
-
-	ret= lcd_4bit_init(&lcd2);
-	ret= lcd_4bit_send_string_pos(&lcd2, "Adnanoo", 1, 3);
+	ret= led_init(PORTB_INDEX, PIN2);
+	ret= Interrupt_INTx_init(EXTI_INT0, EXTI_RISING_EDGE, Interrupt_Handler);
 	while(1)
 	{
 
 
 	}
 	return 0;
+}
+
+void Interrupt_Handler(void)
+{
+	ret= led_toggle(PORTB_INDEX, PIN2);
 }
