@@ -10,7 +10,7 @@
 static void (*ADC_DefaultInterruptHandler)(void)= NULL;
 
 /* --------------------------- Helper Functions Declarations --------------------------- */
-static std_return_type_t ADC_Set_InterruptHandler(const adc_t* _adc_obj, void (*ADC_InterruptHandler)(void));
+static std_return_type_t ADC_Set_InterruptHandler(const adc_t* _adc_obj);
 
 /* ----------------------- Functions Definitions ----------------------- */
 std_return_type_t ADC_init(const adc_t* _adc_obj)
@@ -151,11 +151,11 @@ std_return_type_t ADC_Blocking_GetConversion(const adc_t* _adc_obj, uint16 *conv
 	 return ret_val;
 }
 
-std_return_type_t ADC_Interrupt_GetConversion(const adc_t* _adc_obj, void (*ADC_InterruptCallBack) (void))
+std_return_type_t ADC_Interrupt_GetConversion(const adc_t* _adc_obj)
 {
 	std_return_type_t ret_val= RET_NOK;
 	/* Configure Call Back Function */
-	ret_val= ADC_Set_InterruptHandler(_adc_obj, _adc_obj->ADC_InterruptHandler);
+	ret_val= ADC_Set_InterruptHandler(_adc_obj);
 
 	// Start Conversion
 	ADC_START_CONVERSION();
@@ -167,15 +167,15 @@ std_return_type_t ADC_Interrupt_GetConversion(const adc_t* _adc_obj, void (*ADC_
 }
 
 /* --------------------------- Helper Functions Definitions --------------------------- */
-static std_return_type_t ADC_Set_InterruptHandler(const adc_t* _adc_obj, void (*ADC_InterruptHandler)(void))
+static std_return_type_t ADC_Set_InterruptHandler(const adc_t* _adc_obj)
 {
-	ADC_DefaultInterruptHandler= ADC_InterruptHandler;
+	ADC_DefaultInterruptHandler= _adc_obj->ADC_InterruptHandler;
 	return RET_OK;
 }
 
 /* --------------------------- ISR --------------------------- */
-void __vector_16 (void)  __attribute__((signal)) ;
-void __vector_16 (void)
+void __vector_21 (void)  __attribute__((signal)) ;
+void __vector_21 (void)
 {
 	if(ADC_DefaultInterruptHandler != NULL)
 	{
